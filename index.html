@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Planner / Smart Timetable</title>
+  <link rel="icon" type="image/png" href="assets/study-scene.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <p class="eyebrow">Study Planner / Smart Timetable</p>
+        <h1>Shape your week before your deadlines shape it for you.</h1>
+        <p class="intro-text">
+          One place for study blocks, class planning, the attached to-do list,
+          and a focus timer that can run for any custom duration you choose.
+        </p>
+      </div>
+
+      <div class="top-actions">
+        <span class="sync-pill" id="syncPill">Connecting to Java + SQL...</span>
+        <button class="primary-button" id="autoPlanButton" type="button">Auto-plan top tasks</button>
+        <button class="secondary-button" id="resetDemoButton" type="button">Restore demo data</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="overview-band">
+        <div class="overview-copy">
+          <div class="today-chip">
+            <span class="today-label">Today</span>
+            <strong id="todayLabel">Loading...</strong>
+          </div>
+
+          <div class="stats-row" aria-label="Study planner summary">
+            <article class="stat-tile">
+              <span>Planned hours</span>
+              <strong id="plannedHoursStat">0h</strong>
+            </article>
+            <article class="stat-tile">
+              <span>Tasks due soon</span>
+              <strong id="dueSoonStat">0</strong>
+            </article>
+            <article class="stat-tile">
+              <span>Completed</span>
+              <strong id="completionStat">0%</strong>
+            </article>
+            <article class="stat-tile">
+              <span>Focus mode</span>
+              <strong id="focusModeStat">Balanced</strong>
+            </article>
+          </div>
+
+          <div class="agenda-strip">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">Daily rhythm</p>
+                <h2>Today's agenda</h2>
+              </div>
+            </div>
+            <div class="agenda-list" id="todayAgenda"></div>
+          </div>
+        </div>
+
+        <figure class="hero-figure">
+          <img src="assets/study-scene.png" alt="Study desk illustration with timetable, notes, and coffee">
+          <figcaption>
+            Keep class time, deep work, deadlines, and your current focus block visible
+            without turning the week into chaos.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="workspace-grid">
+        <section class="timetable-surface">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow small">Weekly map</p>
+              <h2>Your study timetable</h2>
+            </div>
+
+            <div class="section-actions">
+              <button class="secondary-button small-button" id="clearAutoButton" type="button">Clear auto blocks</button>
+              <p class="status-note" id="plannerStatus" aria-live="polite">Planner ready.</p>
+            </div>
+          </div>
+
+          <div class="legend" aria-label="Timetable legend">
+            <span class="legend-item deep">Deep focus</span>
+            <span class="legend-item review">Revision</span>
+            <span class="legend-item class">Class</span>
+            <span class="legend-item lab">Lab</span>
+            <span class="legend-item auto">Auto focus</span>
+          </div>
+
+          <div class="timetable-wrapper">
+            <div class="timetable-grid" id="timetableGrid" aria-label="Weekly study timetable"></div>
+          </div>
+
+          <div class="list-band">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">Quick view</p>
+                <h2>Upcoming study blocks</h2>
+              </div>
+            </div>
+            <div class="upcoming-list" id="upcomingSessions"></div>
+          </div>
+        </section>
+
+        <aside class="control-column">
+          <section class="tool-surface timer-surface">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">Focus timer</p>
+                <h2>Custom deep work timer</h2>
+              </div>
+              <span class="timer-state-pill ready" id="timerStatePill">Ready</span>
+            </div>
+
+            <div class="timer-display">
+              <p class="timer-label" id="timerLabelDisplay">Deep focus block</p>
+              <strong class="timer-clock" id="timerClock">01:00:00</strong>
+              <p class="timer-meta" id="timerMeta">Set 1 hour, 2 hours, or any custom study duration.</p>
+            </div>
+
+            <div class="preset-row" id="timerPresets">
+              <button class="secondary-button small-button preset-button" data-duration-seconds="1500" type="button">25 min</button>
+              <button class="secondary-button small-button preset-button" data-duration-seconds="3600" type="button">60 min</button>
+              <button class="secondary-button small-button preset-button" data-duration-seconds="7200" type="button">120 min</button>
+            </div>
+
+            <form class="planner-form timer-form" id="timerForm">
+              <label class="full-span">
+                <span>Focus label</span>
+                <input id="timerLabelInput" name="timerLabelInput" type="text" placeholder="Essay draft sprint" maxlength="80">
+              </label>
+              <label>
+                <span>Hours</span>
+                <input id="timerHours" name="timerHours" type="number" min="0" max="12" value="1" required>
+              </label>
+              <label>
+                <span>Minutes</span>
+                <input id="timerMinutes" name="timerMinutes" type="number" min="0" max="59" value="0" required>
+              </label>
+              <button class="secondary-button form-button" type="submit">Set custom timer</button>
+            </form>
+
+            <div class="timer-actions">
+              <button class="primary-button" id="timerStartButton" type="button">Start focus</button>
+              <button class="secondary-button" id="timerPauseButton" type="button">Pause</button>
+              <button class="secondary-button" id="timerResumeButton" type="button">Resume</button>
+              <button class="secondary-button" id="timerResetButton" type="button">Reset</button>
+            </div>
+          </section>
+
+          <section class="tool-surface">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">Create block</p>
+                <h2>Add study session</h2>
+              </div>
+            </div>
+
+            <form class="planner-form" id="sessionForm">
+              <label>
+                <span>Session title</span>
+                <input id="sessionTitle" name="sessionTitle" type="text" placeholder="Physics problem set" maxlength="80" required>
+              </label>
+              <label>
+                <span>Subject</span>
+                <input id="sessionSubject" name="sessionSubject" type="text" placeholder="Physics" maxlength="60" required>
+              </label>
+              <label>
+                <span>Day</span>
+                <select id="sessionDay" name="sessionDay" required></select>
+              </label>
+              <label>
+                <span>Mode</span>
+                <select id="sessionMode" name="sessionMode">
+                  <option value="deep">Deep focus</option>
+                  <option value="review">Revision</option>
+                  <option value="class">Class</option>
+                  <option value="lab">Lab</option>
+                </select>
+              </label>
+              <label>
+                <span>Start</span>
+                <input id="sessionStart" name="sessionStart" type="time" required>
+              </label>
+              <label>
+                <span>End</span>
+                <input id="sessionEnd" name="sessionEnd" type="time" required>
+              </label>
+              <button class="primary-button form-button" type="submit">Add to timetable</button>
+            </form>
+          </section>
+
+          <section class="tool-surface">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">Attach tasks</p>
+                <h2>Add to-do item</h2>
+              </div>
+            </div>
+
+            <form class="planner-form" id="taskForm">
+              <label class="full-span">
+                <span>Task</span>
+                <input id="taskTitle" name="taskTitle" type="text" placeholder="Finish chemistry notes" maxlength="100" required>
+              </label>
+              <label>
+                <span>Subject</span>
+                <input id="taskSubject" name="taskSubject" type="text" placeholder="Chemistry" maxlength="60" required>
+              </label>
+              <label>
+                <span>Priority</span>
+                <select id="taskPriority" name="taskPriority">
+                  <option value="high">High</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </label>
+              <label>
+                <span>Due date</span>
+                <input id="taskDueDate" name="taskDueDate" type="date" required>
+              </label>
+              <label>
+                <span>Minutes needed</span>
+                <input id="taskMinutes" name="taskMinutes" type="number" min="15" max="480" step="15" value="60" required>
+              </label>
+              <button class="primary-button form-button" type="submit">Add task</button>
+            </form>
+          </section>
+
+          <section class="tool-surface">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">Smart queue</p>
+                <h2>What deserves focus next</h2>
+              </div>
+              <button class="secondary-button small-button" id="refreshInsightsButton" type="button">Refresh</button>
+            </div>
+            <div class="focus-queue" id="focusQueue"></div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="tasks-band">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow small">Attached to-do list</p>
+            <h2>Tasks, deadlines, and study balance</h2>
+          </div>
+
+          <div class="filter-group" role="tablist" aria-label="Task filters">
+            <button class="filter-button active" data-filter="pending" type="button">Pending</button>
+            <button class="filter-button" data-filter="planned" type="button">Planned</button>
+            <button class="filter-button" data-filter="done" type="button">Done</button>
+            <button class="filter-button" data-filter="all" type="button">All</button>
+          </div>
+        </div>
+
+        <div class="tasks-layout">
+          <div class="task-list" id="taskList"></div>
+
+          <aside class="insight-column">
+            <section class="mini-surface">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow small">Load check</p>
+                  <h2>Week balance</h2>
+                </div>
+              </div>
+              <div class="balance-list" id="balanceList"></div>
+            </section>
+
+            <section class="mini-surface">
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow small">Deadline radar</p>
+                  <h2>Due soon</h2>
+                </div>
+              </div>
+              <div class="deadline-list" id="deadlineList"></div>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,33 +1,38 @@
-# 📚 Study Planner & Smart Timetable with Focus Mode
+# Study Planner / Smart Timetable
 
-## 🚀 Overview
-A full-stack web application designed to help students manage their study schedule efficiently. It combines a smart timetable, integrated to-do list, and a customizable focus timer to improve productivity and time management.
+Standalone full-stack project created in:
 
-The application uses a Java backend with SQL-based persistent storage, ensuring data remains محفوظ even after server restarts.
+`C:\Users\user\Documents\New project\study-planner-smart-timetable`
 
----
+## Frontend code
 
-## ✨ Features
-- 📅 Weekly Study Timetable  
-- ✅ Integrated To-Do List  
-- ⚡ Smart Auto-Planning for Tasks  
-- ⏱️ Focus Mode Timer (custom duration)  
-- 💾 Persistent Data Storage (SQL database)  
-- 🎯 Daily Agenda Tracking  
-- 🎨 Interactive UI with 3D hover buttons  
+- `index.html`
+- `styles.css`
+- `app.js`
 
----
+## Backend code
 
-## 🛠️ Tech Stack
-**Frontend:**  
-- HTML  
-- CSS  
-- JavaScript  
+- `backend\src\com\studyplanner\StudyPlannerServer.java`
+- `start-server.ps1`
+- `start-server.cmd`
+- `backend\lib\*.jar`
 
-**Backend:**  
-- Java  
+## Storage
 
-**Database:**  
-- SQL  
+The Java backend stores planner data in an on-disk H2 SQL database:
 
----
+- `data\studyplanner.mv.db`
+
+That file stays on the device, so tasks, sessions, and the focus timer survive server restarts.
+
+## Run it
+
+From this folder:
+
+```powershell
+.\start-server.cmd
+```
+
+Then open:
+
+`http://127.0.0.1:8090`
